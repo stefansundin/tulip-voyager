@@ -2901,7 +2901,7 @@ void Com_Init( char *commandLine ) {
 	// add + commands from command line
 	if ( !Com_AddStartupCommands() ) {
 #ifdef ELITEFORCE
-		Cvar_Set( com_introPlayed->name, "1" );
+		// Cvar_Set( com_introPlayed->name, "1" );
 #else
 		// if the user didn't give any commands, run default action
 		if ( !com_dedicated->integer ) {

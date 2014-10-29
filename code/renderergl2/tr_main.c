@@ -1582,6 +1582,18 @@ static void R_AddEntitySurface (int entityNum)
 	switch ( ent->e.reType ) {
 	case RT_PORTALSURFACE:
 		break;		// don't draw anything
+
+#ifdef ELITEFORCE
+	case RT_ORIENTEDSPRITE:
+	case RT_ALPHAVERTPOLY:
+	case RT_LINE:
+	case RT_ORIENTEDLINE:
+	case RT_LINE2:
+	case RT_BEZIER:
+	case RT_CYLINDER:
+	case RT_ELECTRICITY:
+#endif
+
 	case RT_SPRITE:
 	case RT_BEAM:
 	case RT_LIGHTNING:

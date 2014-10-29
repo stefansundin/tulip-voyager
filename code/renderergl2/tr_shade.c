@@ -979,6 +979,11 @@ static unsigned int RB_CalcShaderVertexAttribs( shaderCommands_t *input )
 static void RB_IterateStagesGeneric( shaderCommands_t *input )
 {
 	int stage;
+#ifdef ELITEFORCE
+	qboolean overridealpha = qfalse;
+	int oldAlphaGen = AGEN_IDENTITY;
+	int oldStateBits = 0;
+#endif
 	
 	vec4_t fogDistanceVector, fogDepthVector = {0, 0, 0, 0};
 	float eyeT = 0;
@@ -1003,6 +1008,27 @@ static void RB_IterateStagesGeneric( shaderCommands_t *input )
 		{
 			break;
 		}
+
+		#ifdef ELITEFORCE
+		// Override the shader alpha channel if requested.
+		if(backEnd.currentEntity->e.renderfx & RF_FORCE_ENT_ALPHA)
+		{
+			overridealpha = qtrue;
+			oldAlphaGen = pStage->alphaGen;
+			oldStateBits = pStage->stateBits;
+			pStage->alphaGen = AGEN_ENTITY;
+
+			// set bits for blendfunc blend
+			pStage->stateBits = GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA;
+
+			// keep the original alphafunc, if any
+			pStage->stateBits |= ( oldStateBits & GLS_ATEST_BITS );
+		}
+		else
+		{
+			overridealpha = qfalse;
+		}
+		#endif
 
 		if (backEnd.depthFill)
 		{
@@ -1377,6 +1403,14 @@ static void RB_IterateStagesGeneric( shaderCommands_t *input )
 		// draw
 		//
 		R_DrawElements(input->numIndexes, input->firstIndex);
+
+		#ifdef ELITEFORCE
+		if ( overridealpha )
+		{
+			pStage->alphaGen = oldAlphaGen;
+			pStage->stateBits = oldStateBits;
+		}
+		#endif
 
 		// allow skipping out to show just lightmaps during development
 		if ( r_lightmap->integer && ( pStage->bundle[0].isLightmap || pStage->bundle[1].isLightmap ) )

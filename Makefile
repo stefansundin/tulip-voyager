@@ -183,6 +183,10 @@ ifndef USE_CURL_DLOPEN
   endif
 endif
 
+ifndef USE_CODEC_MP3
+USE_CODEC_MP3=0
+endif
+
 ifndef USE_CODEC_VORBIS
 USE_CODEC_VORBIS=1
 endif
@@ -1125,6 +1129,16 @@ ifeq ($(USE_CODEC_OPUS),1)
   NEED_OPUS=1
 endif
 
+ifeq ($(USE_CODEC_MP3),1)
+  CLIENT_CFLAGS += -DUSE_CODEC_MP3
+
+  MAD_CFLAGS ?= $(shell pkg-config --silence-errors --cflags mad || true)
+  MAD_LIBS ?= $(shell pkg-config --silence-errors --libs mad || echo -lmad)
+
+  CLIENT_CFLAGS += $(MAD_CFLAGS)
+  CLIENT_LIBS += $(MAD_LIBS)
+endif
+
 ifeq ($(NEED_OPUS),1)
   ifeq ($(USE_INTERNAL_OPUS),1)
     OPUS_CFLAGS = -DOPUS_BUILD -DHAVE_LRINTF -DFLOATING_POINT -DFLOAT_APPROX -DUSE_ALLOCA \
@@ -1763,6 +1777,7 @@ Q3OBJ = \
   $(B)/client/snd_main.o \
   $(B)/client/snd_codec.o \
   $(B)/client/snd_codec_wav.o \
+  $(B)/client/snd_codec_mp3.o \
   $(B)/client/snd_codec_ogg.o \
   $(B)/client/snd_codec_opus.o \
   \

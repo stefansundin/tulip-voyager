@@ -796,6 +796,16 @@ static qboolean GLimp_StartDriverAndSetMode(int mode, qboolean fullscreen, qbool
 	return qtrue;
 }
 
+static qboolean GLimp_HaveExtension(const char *ext)
+{
+	// ZTM: FIXME: not elite force specific
+	//const char *ptr = Q_stristr( glConfig.extensions_string, ext );
+	const char *ptr = Q_stristr( (char *) qglGetString (GL_EXTENSIONS), ext );
+	if (ptr == NULL)
+		return qfalse;
+	ptr += strlen(ext);
+	return ((*ptr == ' ') || (*ptr == '\0'));  // verify it's complete string.
+}
 
 /*
 ===============

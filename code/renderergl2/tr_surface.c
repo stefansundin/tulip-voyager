@@ -242,19 +242,27 @@ RB_SurfaceSprite
 static void RB_SurfaceSprite( void ) {
 	vec3_t		left, up;
 	float		radius;
+	float		rotation;
 	float			colors[4];
 	trRefEntity_t	*ent = backEnd.currentEntity;
 
 	// calculate the xyz locations for the four corners
-	radius = ent->e.radius;
-	if ( ent->e.rotation == 0 ) {
+	#ifdef ELITEFORCE
+	radius = backEnd.currentEntity->e.data.sprite.radius;
+	rotation = backEnd.currentEntity->e.data.sprite.rotation;
+	#else
+	radius = backEnd.currentEntity->e.radius;
+	rotation = backEnd.currentEntity->e.rotation;
+	#endif
+
+	if ( rotation == 0 ) {
 		VectorScale( backEnd.viewParms.or.axis[1], radius, left );
 		VectorScale( backEnd.viewParms.or.axis[2], radius, up );
 	} else {
 		float	s, c;
 		float	ang;
 		
-		ang = M_PI * ent->e.rotation / 180;
+		ang = M_PI * rotation / 180;
 		s = sin( ang );
 		c = cos( ang );
 

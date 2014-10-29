@@ -19,6 +19,9 @@ ifeq ($(COMPILE_PLATFORM),sunos)
   COMPILE_ARCH=$(shell uname -p | sed -e 's/i.86/x86/')
 endif
 
+ifndef BUILD_ELITEFORCE
+  BUILD_ELITEFORCE = 1
+endif
 ifndef BUILD_STANDALONE
   BUILD_STANDALONE =
 endif
@@ -35,10 +38,18 @@ ifndef BUILD_GAME_QVM
   BUILD_GAME_QVM   =
 endif
 ifndef BUILD_BASEGAME
-  BUILD_BASEGAME =
+  ifeq ($(BUILD_ELITEFORCE),1)
+    BUILD_BASEGAME = 0
+  else
+    BUILD_BASEGAME =
+  endif
 endif
 ifndef BUILD_MISSIONPACK
-  BUILD_MISSIONPACK=
+  ifeq ($(BUILD_ELITEFORCE),1)
+    BUILD_MISSIONPACK= 0
+  else
+    BUILD_MISSIONPACK=
+  endif
 endif
 ifndef BUILD_RENDERER_OPENGL2
   BUILD_RENDERER_OPENGL2=
@@ -112,15 +123,35 @@ endif
 export CROSS_COMPILING
 
 ifndef VERSION
-VERSION=1.36
+  ifeq ($(BUILD_ELITEFORCE),1)
+    VERSION=1.38
+  else
+    VERSION=1.36
+  endif
 endif
 
 ifndef CLIENTBIN
-CLIENTBIN=ioquake3
+  ifeq ($(BUILD_ELITEFORCE),1)
+    CLIENTBIN=liliumvoyhm
+  else
+    CLIENTBIN=ioquake3
+  endif
 endif
 
 ifndef SERVERBIN
-SERVERBIN=ioq3ded
+  ifeq ($(BUILD_ELITEFORCE),1)
+    SERVERBIN=liliumvoyded
+  else
+    SERVERBIN=ioq3ded
+  endif
+endif
+
+ifndef RENDERER_PREFIX
+  ifeq ($(BUILD_ELITEFORCE),1)
+    RENDERER_PREFIX=liliumvoyhm_renderer_
+  else
+    RENDERER_PREFIX=renderer_
+  endif
 endif
 
 ifndef BASEGAME
@@ -289,6 +320,10 @@ LOKISETUPDIR=misc/setup
 NSISDIR=misc/nsis
 SDLHDIR=$(MOUNT_DIR)/SDL2
 LIBSDIR=$(MOUNT_DIR)/libs
+
+ifeq ($(BUILD_ELITEFORCE),1)
+  CFLAGS += -DELITEFORCE
+endif
 
 bin_path=$(shell which $(1) 2> /dev/null)
 

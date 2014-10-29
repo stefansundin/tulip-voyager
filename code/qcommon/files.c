@@ -196,7 +196,6 @@ static const unsigned int pak_checksums[] = {
 	908855077u,
 	977125798u
 };
-#endif
 
 static const unsigned int missionpak_checksums[] =
 {
@@ -3144,21 +3143,16 @@ qboolean FS_ComparePaks( char *neededpaks, int len, qboolean dlstring ) {
 		havepak = qfalse;
 
 		// never autodownload any of the id paks
-#ifdef ELITEFORCE
-  #ifndef STANDALONE
-		if(FS_idPak(fs_serverReferencedPakNames[i], BASEGAME, NUM_ID_PAKS))
-			continue;
-  #endif
-#else
 		if(FS_idPak(fs_serverReferencedPakNames[i], BASEGAME, NUM_ID_PAKS)
+#ifndef ELITEFORCE
 #ifndef STANDALONE
 				|| FS_idPak(fs_serverReferencedPakNames[i], BASETA, NUM_TA_PAKS)
+#endif
 #endif
 			)
 		{
 			continue;
 		}
-#endif
 
 		// Make sure the server cannot make us write to non-quake3 directories.
 		if(FS_CheckDirTraversal(fs_serverReferencedPakNames[i]))

@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <winsock.h>
 #endif
 
-#ifdef ELITEFORCE
 int demo_protocols[] =
+#ifdef ELITEFORCE
 { 0 };
 #else
 { 67, 66, 0 };

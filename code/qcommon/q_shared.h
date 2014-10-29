@@ -1179,9 +1179,9 @@ typedef struct playerState_s {
 	vec3_t		velocity;
 	int			weaponTime;
 #ifdef ELITEFORCE
-        int                     rechargeTime;           // for the phaser
-        short           useTime;                        // use debounce
-        int                     introTime;                      // for the holodoor
+	int			rechargeTime;	// for the phaser
+	short		useTime;		// use debounce
+	int			introTime;		// for the holodoor
 #endif
 	int			gravity;
 	int			speed;
@@ -1284,11 +1284,11 @@ typedef struct playerState_s {
 // usercmd_t is sent to the server each client frame
 #ifdef ELITEFORCE
 typedef struct usercmd_s {
-        int             serverTime;
-        byte    buttons;
-        byte    weapon;
-        int             angles[3];
-        signed char     forwardmove, rightmove, upmove;
+	int			serverTime;
+	byte		buttons;
+	byte		weapon;
+	int			angles[3];
+	signed char	forwardmove, rightmove, upmove;
 } usercmd_t;
 #else
 typedef struct usercmd_s {
@@ -1299,6 +1299,7 @@ typedef struct usercmd_s {
 	signed char	forwardmove, rightmove, upmove;
 } usercmd_t;
 #endif
+
 //===================================================================
 
 // if entityState->solid == SOLID_BMODEL, modelindex is an inline model number

@@ -3061,8 +3061,8 @@ static void ScanAndLoadShaderFiles( void )
 				break;
 			}
 		}
+			
 		
-
 		if (buffers[i])
 			sum += summand;		
 	}

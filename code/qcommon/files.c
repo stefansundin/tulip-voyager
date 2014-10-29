@@ -3507,7 +3507,6 @@ static void FS_CheckPak0( void )
 			{
 				if(pakBasename[3] == '0')
 				{
-
 					Com_Printf("\n\n"
 						"**************************************************\n"
 						"WARNING: " BASEGAME "/pak0.pk3 is present but its checksum (%u)\n"
@@ -3573,11 +3572,13 @@ static void FS_CheckPak0( void )
 				"\"pak0.pk3\" is missing. Please copy it "
 				"from your legitimate EliteForce CDROM. ");
 		}
+
 		if((foundPak & 0x1fe) != 0x1fe)
 		{
 			Q_strcat(errorText, sizeof(errorText),
 				"Patch files are missing. Please\n"
-				"copy the .pk3 files from EliteForce patch 1.2 to baseEF.\n");		}
+				"copy the .pk3 files from EliteForce patch 1.2 to baseEF.\n");
+		}
 
 		Q_strcat(errorText, sizeof(errorText),
 			va("Also check that your EliteForce executable is in "
@@ -3631,7 +3632,6 @@ static void FS_CheckPak0( void )
 			{
 				if(pakBasename[3] == '0')
 				{
-
 					Com_Printf("\n\n"
 							"**************************************************\n"
 							"WARNING: " BASEGAME "/pak0.pk3 is present but its checksum (%u)\n"
@@ -3748,6 +3748,7 @@ static void FS_CheckPak0( void )
 					"\"pak0.pk3\" is missing. Please copy it "
 					"from your legitimate Q3 CDROM. ");
 		}
+
 		if((foundPak & 0x1fe) != 0x1fe)
 		{
 			Q_strcat(errorText, sizeof(errorText),
@@ -4333,7 +4334,6 @@ void	FS_FilenameCompletion( const char *dir, const char *ext,
 		callback( filename );
 	}
 	FS_FreeFileList( filenames );
-
 }
 
 const char *FS_GetCurrentGameDir(void)

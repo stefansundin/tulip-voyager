@@ -324,6 +324,7 @@ int MSG_ReadBits( msg_t *msg, int bits ) {
 }
 
 
+
 //================================================================================
 
 //
@@ -389,7 +390,7 @@ void MSG_WriteString( msg_t *sb, const char *s ) {
 		MSG_WriteData (sb, "", 1);
 	} else {
 #ifdef ELITEFORCE
-		int l;
+		int		l;
 #else
 		int		l,i;
 #endif
@@ -421,7 +422,7 @@ void MSG_WriteBigString( msg_t *sb, const char *s ) {
 		MSG_WriteData (sb, "", 1);
 	} else {
 #ifdef ELITEFORCE
-		int l;
+		int		l;
 #else
 		int		l,i;
 #endif
@@ -892,7 +893,7 @@ void MSG_WriteDeltaUsercmdKey( msg_t *msg, int key, usercmd_t *from, usercmd_t *
 
 /*
 =====================
-MSG_ReadDeltaUsercmd
+MSG_ReadDeltaUsercmdKey
 =====================
 */
 void MSG_ReadDeltaUsercmdKey( msg_t *msg, int key, usercmd_t *from, usercmd_t *to ) {
@@ -1120,6 +1121,7 @@ netField_t	entityStateFields[] =
 };
 #endif
 
+
 // if (int)f == f and (int)f + ( 1<<(FLOAT_INT_BITS-1) ) < ( 1 << FLOAT_INT_BITS )
 // the float will be sent with FLOAT_INT_BITS, otherwise all 32 bits will be sent
 #define	FLOAT_INT_BITS	13
@@ -1145,8 +1147,8 @@ void MSG_WriteDeltaEntity( msg_t *msg, struct entityState_s *from, struct entity
 	float		fullFloat;
 	int			*fromF, *toF;
 #ifdef ELITEFORCE
-        byte            vector[PVECTOR_BYTES];
-	int                     vectorIndex = -1;
+	byte		vector[PVECTOR_BYTES];
+	int			vectorIndex = -1;
 #endif
 
 	numFields = ARRAY_LEN( entityStateFields );
@@ -1171,7 +1173,7 @@ void MSG_WriteDeltaEntity( msg_t *msg, struct entityState_s *from, struct entity
 		Com_Error (ERR_FATAL, "MSG_WriteDeltaEntity: Bad entity number: %i", to->number );
 	}
 
-        #ifdef ELITEFORCE
+	#ifdef ELITEFORCE
 	if(msg->compat)
 		Com_Memset(vector, 0, sizeof(vector));
 	#endif
@@ -1345,9 +1347,9 @@ void MSG_ReadDeltaEntity( msg_t *msg, entityState_t *from, entityState_t *to,
 	int			trunc;
 	int			startBit, endBit;
 #ifdef ELITEFORCE
-        int                     vectorIndex;
-        byte            vector_space[PVECTOR_BYTES];
-	byte            *vector = vector_space;
+	int			vectorIndex;
+	byte		vector_space[PVECTOR_BYTES];
+	byte		*vector = vector_space;
 #endif
 
 	if ( number < 0 || number >= MAX_GENTITIES) {
@@ -1620,6 +1622,7 @@ netField_t	playerStateFields[] =
 { PSF(loopSound), 16 }
 };
 #endif
+
 /*
 =============
 MSG_WriteDeltaPlayerstate
@@ -1664,7 +1667,7 @@ void MSG_WriteDeltaPlayerstate( msg_t *msg, struct playerState_s *from, struct p
 	#ifdef ELITEFORCE
 	}
 	#endif
-	
+
 	oldsize += numFields - lc;
 
 	#ifdef ELITEFORCE
@@ -1895,7 +1898,8 @@ void MSG_ReadDeltaPlayerstate (msg_t *msg, playerState_t *from, playerState_t *t
 	#ifdef ELITEFORCE
 	}
 	#endif
-	
+
+
 	// read the arrays
 #ifdef ELITEFORCE
 	if(msg->compat || MSG_ReadBits( msg, 1 ))

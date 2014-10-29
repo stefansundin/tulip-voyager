@@ -965,7 +965,7 @@ typedef struct {
 	float					triangleTable[FUNCTABLE_SIZE];
 	float					sawToothTable[FUNCTABLE_SIZE];
 	float					inverseSawToothTable[FUNCTABLE_SIZE];
-	float                                   noiseTable[FUNCTABLE_SIZE];
+	float					noiseTable[FUNCTABLE_SIZE];
 	float					fogTable[FOG_TABLE_SIZE];
 } trGlobals_t;
 

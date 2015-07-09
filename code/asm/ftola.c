@@ -23,7 +23,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "qasm-inline.h"
 
 #if defined (__i386__) || defined(__x86_64__)
+#ifdef ELITEFORCE
+// Make Elite Force use round to nearest instead of round toward zero
+static const unsigned short fpucw = 0x007F;
+#else
 static const unsigned short fpucw = 0x0C7F;
+#endif
 
 /*
  * GNU inline asm ftol conversion functions using SSE or FPU
@@ -35,7 +40,11 @@ long qftolsse(float f)
   
   __asm__ volatile
   (
+#ifdef ELITEFORCE
+    "cvtss2si %1, %0\n"
+#else
     "cvttss2si %1, %0\n"
+#endif
     : "=r" (retval)
     : "x" (f)
   );
@@ -50,7 +59,11 @@ int qvmftolsse(void)
   __asm__ volatile
   (
     "movss (" EDI ", " EBX ", 4), %%xmm0\n"
+#ifdef ELITEFORCE
+    "cvtss2si %%xmm0, %0\n"
+#else
     "cvttss2si %%xmm0, %0\n"
+#endif
     : "=r" (retval)
     :
     : "%xmm0"

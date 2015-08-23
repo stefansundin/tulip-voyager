@@ -1256,9 +1256,14 @@ int SV_SendDownloadMessages(void)
 			if(retval)
 			{
 #ifdef ELITEFORCE
-				if(!msg.compat)
+				if(msg.compat)
+				{
+					// compat clients need svc_snapshot to update reliableAcknowledge
+					SV_WriteSnapshotToClient(cl, &msg);
+				}
+				else
 #endif
-				MSG_WriteByte(&msg, svc_EOF);
+					MSG_WriteByte(&msg, svc_EOF);
 				SV_Netchan_Transmit(cl, &msg);
 				numDLs += retval;
 			}

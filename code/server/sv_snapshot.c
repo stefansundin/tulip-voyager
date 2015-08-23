@@ -119,7 +119,10 @@ static void SV_EmitPacketEntities( clientSnapshot_t *from, clientSnapshot_t *to,
 SV_WriteSnapshotToClient
 ==================
 */
-static void SV_WriteSnapshotToClient( client_t *client, msg_t *msg ) {
+#ifndef ELITEFORCE
+static
+#endif
+void SV_WriteSnapshotToClient( client_t *client, msg_t *msg ) {
 	clientSnapshot_t	*frame, *oldframe;
 	int					lastframe;
 	int					i;
@@ -674,12 +677,7 @@ void SV_SendClientMessages(void)
 		if(svs.time - c->lastSnapshotTime < c->snapshotMsec * com_timescale->value)
 			continue;		// It's not time yet
 
-#ifdef ELITEFORCE
-		// compat clients need svc_snapshot to update reliableAcknowledge
-		if(*c->downloadName && !c->compat)
-#else
 		if(*c->downloadName)
-#endif
 			continue;		// Client is downloading, don't send snapshots
 
 		if(c->netchan.unsentFragments || c->netchan_start_queue)

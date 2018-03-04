@@ -57,6 +57,9 @@ endif
 ifndef BUILD_AUTOUPDATER  # DON'T build unless you mean to!
   BUILD_AUTOUPDATER=0
 endif
+ifndef BUILD_FINAL
+  BUILD_FINAL      =0
+endif
 
 #############################################################################
 #
@@ -371,6 +374,8 @@ ifeq ($(SDL_CFLAGS),)
   endif
 endif
 
+ifneq ($(BUILD_FINAL),1)
+
 # Add git version info
 USE_GIT=
 ifeq ($(wildcard .git),.git)
@@ -379,6 +384,8 @@ ifeq ($(wildcard .git),.git)
     VERSION:=$(VERSION)_GIT_$(GIT_REV)
     USE_GIT=1
   endif
+endif
+
 endif
 
 

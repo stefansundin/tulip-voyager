@@ -57,7 +57,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     #define CLIENT_WINDOW_TITLE		"ioquake3"
     #define CLIENT_WINDOW_MIN_TITLE	"ioq3"
     #define HOMEPATH_NAME_UNIX		".q3a"
-    #define HOMEPATH_NAME_WIN			"Quake3"
+    #define HOMEPATH_NAME_WIN			"Lilium Quake3"
     #define HOMEPATH_NAME_MACOSX	HOMEPATH_NAME_WIN
     #define STEAMPATH_NAME			"Quake 3 Arena"
     #define STEAMPATH_APPID			"2200"

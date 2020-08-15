@@ -2898,7 +2898,15 @@ static int QDECL paksort( const void *a, const void *b ) {
 	aa = *(char **)a;
 	bb = *(char **)b;
 
-	return FS_PathCmp( aa, bb );
+	// downloaded files have priority
+	// this is needed because otherwise even if a clientside was downloaded, there is no gurantee it is actually used.
+	if (!Q_stricmpn(aa, "dl_", 3) && Q_stricmpn(bb, "dl_", 3)) {
+		return 1;
+	} else if (Q_stricmpn(aa, "dl_", 3) && !Q_stricmpn(bb, "dl_", 3)) {
+		return -1;
+	} else {
+		return FS_PathCmp(aa, bb);
+	}
 }
 
 /*
@@ -2909,6 +2917,12 @@ Sets fs_gamedir, adds the directory to the head of the path,
 then loads the zip headers
 ================
 */
+const char *get_filename(const char *path) {
+	const char *slash = strrchr(path, PATH_SEP);
+	if (!slash || slash == path) return "";
+	return slash + 1;
+}
+
 void FS_AddGameDirectory( const char *path, const char *dir ) {
 	searchpath_t	*sp;
 	searchpath_t	*search;
@@ -2925,6 +2939,8 @@ void FS_AddGameDirectory( const char *path, const char *dir ) {
 
 	int				pakwhich;
 	int				len;
+
+	const char 		*filename;
 
 	// Unique
 	for ( sp = fs_searchpaths ; sp ; sp = sp->next ) {
@@ -2979,10 +2995,34 @@ void FS_AddGameDirectory( const char *path, const char *dir ) {
 		if (pakwhich) {
 			// The next .pk3 file is before the next .pk3dir
 			pakfile = FS_BuildOSPath(path, dir, pakfiles[pakfilesi]);
+			filename = get_filename(pakfile);
 			if ((pak = FS_LoadZipFile(pakfile, pakfiles[pakfilesi])) == 0) {
 				// This isn't a .pk3! Next!
 				pakfilesi++;
 				continue;
+			}
+
+			// files beginning with "dl_" are only loaded when referenced by the server
+			if (!Q_stricmpn(filename, "dl_", 3)) {
+				int j;
+				qboolean found = qfalse;
+
+				for (j = 0; j < fs_numServerReferencedPaks; j++) {
+					if (pak->checksum == fs_serverReferencedPaks[j]) {
+						// server wants it!
+						found = qtrue;
+						break;
+					}
+				}
+
+				if (!found) {
+					// server has no interest in the file
+					unzClose(pak->handle);
+					Z_Free(pak->buildBuffer);
+					Z_Free(pak);
+					pakfilesi++;
+					continue;
+				}
 			}
 
 			Q_strncpyz(pak->pakPathname, curpath, sizeof(pak->pakPathname));
@@ -3129,6 +3169,8 @@ qboolean FS_ComparePaks( char *neededpaks, int len, qboolean dlstring ) {
 	char *origpos = neededpaks;
 	int i;
 
+	qboolean badname = qfalse;
+
 	if (!fs_numServerReferencedPaks)
 		return qfalse; // Server didn't send any pack information along
 
@@ -3167,6 +3209,14 @@ qboolean FS_ComparePaks( char *neededpaks, int len, qboolean dlstring ) {
 
 		if ( !havepak && fs_serverReferencedPakNames[i] && *fs_serverReferencedPakNames[i] ) { 
 			// Don't got it
+			char moddir[MAX_ZPATH], filename[MAX_ZPATH];
+			int read = sscanf( fs_serverReferencedPakNames[i], "%255[^'/']/%255s", moddir, filename );
+
+			if ( read != 2 ) {
+				Com_Printf( "WARNING: Unable to parse pak name: %s\n", fs_serverReferencedPakNames[i] );
+				badname = qtrue;
+				continue;
+			}
 
 			if (dlstring)
 			{
@@ -3183,19 +3233,17 @@ qboolean FS_ComparePaks( char *neededpaks, int len, qboolean dlstring ) {
 
 				// Local name
 				Q_strcat( neededpaks, len, "@");
+
 				// Do we have one with the same name?
-				if ( FS_SV_FileExists( va( "%s.pk3", fs_serverReferencedPakNames[i] ) ) )
+				if ( FS_SV_FileExists( va( "%s/dl_%s.pk3", moddir, filename ) ) )
 				{
-					char st[MAX_ZPATH];
 					// We already have one called this, we need to download it to another name
 					// Make something up with the checksum in it
-					Com_sprintf( st, sizeof( st ), "%s.%08x.pk3", fs_serverReferencedPakNames[i], fs_serverReferencedPaks[i] );
-					Q_strcat( neededpaks, len, st );
+					Q_strcat( neededpaks, len, va( "%s/dl_%s.%08x.pk3", moddir, filename, fs_serverReferencedPaks[i] ) );
 				}
 				else
 				{
-					Q_strcat( neededpaks, len, fs_serverReferencedPakNames[i] );
-					Q_strcat( neededpaks, len, ".pk3" );
+					Q_strcat( neededpaks, len, va( "%s/dl_%s.pk3", moddir, filename ) );
 				}
 
 				// Find out whether it might have overflowed the buffer and don't add this file to the
@@ -3220,7 +3268,7 @@ qboolean FS_ComparePaks( char *neededpaks, int len, qboolean dlstring ) {
 		}
 	}
 
-	if ( *neededpaks ) {
+	if ( *neededpaks || badname ) {
 		return qtrue;
 	}
 

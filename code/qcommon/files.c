@@ -268,6 +268,7 @@ static	cvar_t		*fs_microsoftstorepath;
 static	cvar_t		*fs_basepath;
 static	cvar_t		*fs_basegame;
 static	cvar_t		*fs_gamedirvar;
+static	cvar_t		*fs_forcegame;
 static	searchpath_t	*fs_searchpaths;
 static	int			fs_readCount;			// total bytes read
 static	int			fs_loadCount;			// total files read
@@ -3390,6 +3391,7 @@ static void FS_Startup( const char *gameName )
 	}
 	fs_homepath = Cvar_Get ("fs_homepath", homePath, CVAR_INIT|CVAR_PROTECTED );
 	fs_gamedirvar = Cvar_Get ("fs_game", "", CVAR_INIT|CVAR_SYSTEMINFO );
+	fs_forcegame = Cvar_Get ("fs_forcegame", "", CVAR_INIT );
 
 	if (!gameName[0]) {
 		Cvar_ForceReset( "com_basegame" );
@@ -3473,6 +3475,25 @@ static void FS_Startup( const char *gameName )
 		if (fs_homepath->string[0] && Q_stricmp(fs_homepath->string,fs_basepath->string)) {
 			FS_AddGameDirectory(fs_homepath->string, fs_gamedirvar->string);
 		}
+	}
+
+	// forcegame allows users to override any fs_game settings
+	if ( fs_forcegame->string[0] && Q_stricmp(fs_forcegame->string, fs_gamedir) ) {
+		if ( !fs_basegame->string[0] || Q_stricmp(fs_forcegame->string, fs_basegame->string) ) {
+			if (fs_gogpath->string[0]) {
+				FS_AddGameDirectory(fs_gogpath->string, fs_forcegame->string);
+			}
+			if (fs_steampath->string[0]) {
+				FS_AddGameDirectory(fs_steampath->string, fs_forcegame->string);
+			}
+			if (fs_basepath->string[0]) {
+				FS_AddGameDirectory(fs_basepath->string, fs_forcegame->string);
+			}
+			if (fs_homepath->string[0] && Q_stricmp(fs_homepath->string,fs_basepath->string)) {
+				FS_AddGameDirectory(fs_homepath->string, fs_forcegame->string);
+			}
+		}
+		Q_strncpyz( fs_gamedir, fs_forcegame->string, sizeof( fs_gamedir ) );
 	}
 
 #ifndef STANDALONE
@@ -4166,6 +4187,7 @@ void FS_InitFilesystem( void ) {
 	Com_StartupVariable("fs_basepath");
 	Com_StartupVariable("fs_homepath");
 	Com_StartupVariable("fs_game");
+	Com_StartupVariable( "fs_forcegame" );
 
 	if(!FS_FilenameCompare(Cvar_VariableString("fs_game"), com_basegame->string))
 		Cvar_Set("fs_game", "");
@@ -4240,7 +4262,7 @@ void FS_Restart( int checksumFeed ) {
 
 	lastGameDir = ( lastValidGame[0] ) ? lastValidGame : lastValidComBaseGame;
 
-	if ( Q_stricmp( FS_GetCurrentGameDir(), lastGameDir ) ) {
+	if ( Q_stricmp( FS_GetCurrentGameDir(), lastGameDir ) && !fs_forcegame->string[0] ) {
 		Sys_RemovePIDFile( lastGameDir );
 		Sys_InitPIDFile( FS_GetCurrentGameDir() );
 
@@ -4379,6 +4401,9 @@ void	FS_FilenameCompletion( const char *dir, const char *ext,
 
 const char *FS_GetCurrentGameDir(void)
 {
+	if (fs_forcegame->string[0])
+		return fs_forcegame->string;
+
 	if(fs_gamedirvar->string[0])
 		return fs_gamedirvar->string;
 

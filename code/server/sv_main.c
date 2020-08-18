@@ -62,6 +62,7 @@ cvar_t	*sv_lanForceRate; // dedicated 1 (LAN) server forces local client rates t
 cvar_t	*sv_strictAuth;
 #endif
 cvar_t	*sv_banFile;
+cvar_t	*sv_pingFix;
 
 serverBan_t serverBans[SERVER_MAXBANS];
 int serverBansCount = 0;
@@ -955,7 +956,7 @@ static void SV_CalcPings( void ) {
 		total = 0;
 		count = 0;
 		for ( j = 0 ; j < PACKET_BACKUP ; j++ ) {
-			if ( cl->frames[j].messageAcked <= 0 ) {
+			if ( cl->frames[j].messageAcked == -1 ) {
 				continue;
 			}
 			delta = cl->frames[j].messageAcked - cl->frames[j].messageSent;
@@ -968,6 +969,10 @@ static void SV_CalcPings( void ) {
 			cl->ping = total/count;
 			if ( cl->ping > 999 ) {
 				cl->ping = 999;
+			}
+			if ( sv_pingFix->integer && cl->ping < 1 )
+			{ // Botfilters assume that players with 0 ping are bots. So put the minimum ping for humans at 1. At least with the new ping calculation enabled.
+				cl->ping = 1;
 			}
 		}
 

@@ -235,8 +235,10 @@ Sys_Basename
 ==================
 */
 const char *Sys_Basename( char *path )
-{
-	return basename( path );
+{ // Make a copy of the path to ensure we don't modify the input string (POSIX vs. GNU)
+	static char buf[ MAX_OSPATH ] = { 0 };
+	Q_strncpyz( buf, path, sizeof(buf) );
+	return basename( buf );
 }
 
 /*
@@ -245,8 +247,10 @@ Sys_Dirname
 ==================
 */
 const char *Sys_Dirname( char *path )
-{
-	return dirname( path );
+{ // Make a copy of the path to ensure we don't modify the input string (POSIX)
+	static char buf[ MAX_OSPATH ] = { 0 };
+	Q_strncpyz( buf, path, sizeof(buf) );
+	return dirname( buf );
 }
 
 /*

@@ -195,6 +195,7 @@ SV_GetUserinfo
 ===============
 */
 void SV_GetUserinfo( int index, char *buffer, int bufferSize ) {
+	static cvar_t *passwordCvar;
 	if ( bufferSize < 1 ) {
 		Com_Error( ERR_DROP, "SV_GetUserinfo: bufferSize == %i", bufferSize );
 	}
@@ -202,6 +203,24 @@ void SV_GetUserinfo( int index, char *buffer, int bufferSize ) {
 		Com_Error (ERR_DROP, "SV_GetUserinfo: bad index %i", index);
 	}
 	Q_strncpyz( buffer, svs.clients[ index ].userinfo, bufferSize );
+
+	// If we don't have the cvar handle try to get it. As SV_GetUserinfo is only called by the game module the
+	// G_InitGame code should've run at this point and the cvar should exist with whatever default value and flags the
+	// game module specified, so we can just specify an empty default and 0 flags.
+	if ( !passwordCvar ) passwordCvar = Cvar_Get( "g_password", "", 0 );
+
+	// Bots and looback clients should never get rejected by the game module, but some mods try to verify passwords for
+	// them anyway. To work around this issue we're going to always set the correct password for them, if the game
+	// module requires a password. NOTE: If the game module renames the cvar this workaround is going to fail.
+	if ( passwordCvar && passwordCvar->string && passwordCvar->string[0] && Q_stricmp(passwordCvar->string, "none") &&
+		// SVF_BOT is assigned by the game module. We could also check for NA_BOT as netchan type, but for typical
+		// modules it shouldn't matter and by using SVF_BOT we leave some control over the workaround to the game
+		// module, which in turn could try to workaround this workaround - whyever it would require to do so...
+		( (svs.clients[index].gentity && (svs.clients[index].gentity->r.svFlags & SVF_BOT)) ||
+		  (svs.clients[index].netchan.remoteAddress.type == NA_LOOPBACK) ) )
+	{
+		Info_SetValueForKey( buffer, "password", passwordCvar->string );
+	}
 }
 
 

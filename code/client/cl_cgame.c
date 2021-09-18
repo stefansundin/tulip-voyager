@@ -575,6 +575,18 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		re.ClearScene();
 		return 0;
 	case CG_R_ADDREFENTITYTOSCENE:
+#ifdef ELITEFORCE
+		if ( cl_widescreenFOV->integer )
+		{ // Ugly workaround for teleport sprite
+			static qhandle_t transportShader = -1;
+			refEntity_t *ent = VMA(1);
+			if ( transportShader == -1 ) transportShader = re.RegisterShader( "playerTeleport" );
+			if ( ent->customShader == transportShader && ent->reType == RT_SPRITE && ent->renderfx == RF_FIRST_PERSON )
+			{
+				ent->data.sprite.radius /= (cls.ws_xscale * cls.ws_yscale);
+			}
+		}
+#endif
 		re.AddRefEntityToScene( VMA(1) );
 		return 0;
 	case CG_R_ADDPOLYTOSCENE:
@@ -624,7 +636,13 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		re.SetColor( VMA(1) );
 		return 0;
 	case CG_R_DRAWSTRETCHPIC:
+#ifdef ELITEFORCE // Workaround for zoom_mask
+		static qhandle_t zoomShader = -1;
+		if ( zoomShader == -1 ) zoomShader = re.RegisterShader( "gfx/misc/zoom_mask2" );
+		if ( cl_widescreenHUD->integer && args[9] != zoomShader )
+#else
 		if ( cl_widescreenHUD->integer )
+#endif
 			re.DrawStretchPic( VMF(1) * cls.ws_xscale + cls.ws_xoffs, VMF(2) * cls.ws_yscale + cls.ws_yoffs, VMF(3) * cls.ws_xscale, VMF(4) * cls.ws_yscale, VMF(5), VMF(6), VMF(7), VMF(8), args[9] );
 		else
 			re.DrawStretchPic( VMF(1), VMF(2), VMF(3), VMF(4), VMF(5), VMF(6), VMF(7), VMF(8), args[9] );

@@ -604,7 +604,11 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 			ref->width *= cls.ws_xscale;
 			ref->height *= cls.ws_yscale;
 		}
-		else if ( cl_widescreenFOV->integer && (ref->width == cls.glconfig.vidWidth && ref->height == cls.glconfig.vidHeight) )
+		else if ( cl_widescreenFOV->integer && (ref->width == cls.glconfig.vidWidth && ref->height == cls.glconfig.vidHeight)
+#ifdef ELITEFORCE
+			&& !(cl.snap.ps.introTime > cl.serverTime)
+#endif
+		 )
 		{ // Fullscreen scene: adjust FOV
 			// NOTE: This might break the underwater effect on the default cgame module and possible other effects added by custom cgame modules.
 			if ( cls.glconfig.vidWidth * 3 > cls.glconfig.vidHeight * 4 )

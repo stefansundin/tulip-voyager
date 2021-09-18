@@ -122,6 +122,10 @@ cvar_t	*cl_consoleKeys;
 cvar_t	*cl_consoleUseScanCode;
 cvar_t	*cl_consoleShiftRequirement;
 
+cvar_t	*cl_widescreenHUD;
+cvar_t	*cl_widescreenMenu;
+cvar_t	*cl_widescreenFOV;
+
 cvar_t	*cl_rate;
 
 clientActive_t		cl;
@@ -3225,6 +3229,7 @@ CL_InitRenderer
 void CL_InitRenderer( void ) {
 	// this sets up the renderer and calls R_Init
 	re.BeginRegistration( &cls.glconfig );
+	CL_UpdateAspectAdjust();
 
 	// load character sets
 #ifdef ELITEFORCE
@@ -3728,6 +3733,10 @@ void CL_Init( void ) {
 	cl_consoleKeys = Cvar_Get( "cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
 	cl_consoleUseScanCode = Cvar_Get( "cl_consoleUseScanCode", "1", CVAR_ARCHIVE );
 	cl_consoleShiftRequirement = Cvar_Get( "cl_consoleShiftRequirement", "1", CVAR_ARCHIVE );
+
+	cl_widescreenHUD = Cvar_Get( "cl_widescreenHUD", "0", CVAR_ARCHIVE );
+	cl_widescreenMenu = Cvar_Get( "cl_widescreenMenu", "0", CVAR_ARCHIVE );
+	cl_widescreenFOV = Cvar_Get( "cl_widescreenFOV", "0", CVAR_ARCHIVE );
 
 	// userinfo
 	Cvar_Get ("name", "UnnamedPlayer", CVAR_USERINFO | CVAR_ARCHIVE );
@@ -4869,4 +4878,35 @@ qboolean CL_CDKeyValidate( const char *key, const char *checksum ) {
 
 	return qfalse;
 #endif
+}
+
+void CL_UpdateAspectAdjust( void )
+{
+	if ( cls.glconfig.vidWidth * 3 > cls.glconfig.vidHeight * 4 )
+	{ // We want to build an artifical 4:3 area, using the height as base
+		cls.ws_width = cls.glconfig.vidHeight / 3.0f * 4.0f;
+		cls.ws_height = cls.glconfig.vidHeight;
+		cls.ws_xscale = cls.ws_width / cls.glconfig.vidWidth;
+		cls.ws_xoffs = ((cls.glconfig.vidWidth - cls.ws_width) / 2.0f);
+		cls.ws_yscale = 1.0f;
+		cls.ws_yoffs = 0.0f;
+	}
+	else if ( cls.glconfig.vidWidth * 3 < cls.glconfig.vidHeight * 4 )
+	{ // We want to build an artifical 4:3 area, using the width as base
+		cls.ws_width = cls.glconfig.vidWidth;
+		cls.ws_height = cls.glconfig.vidWidth / 4.0f * 3.0f;
+		cls.ws_xscale = 1.0f;
+		cls.ws_xoffs = 0.0f;
+		cls.ws_yscale = cls.ws_height / cls.glconfig.vidHeight;
+		cls.ws_yoffs = ((cls.glconfig.vidHeight - cls.ws_height) / 2.0f);
+	}
+	else
+	{
+		cls.ws_width = cls.glconfig.vidWidth;
+		cls.ws_height = cls.glconfig.vidHeight;
+		cls.ws_xscale = 1.0f;
+		cls.ws_xoffs = 0.0f;
+		cls.ws_yscale = 1.0f;
+		cls.ws_yoffs = 0.0f;
+	}
 }

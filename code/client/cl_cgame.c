@@ -596,13 +596,34 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		return 0;
 #endif
 	case CG_R_RENDERSCENE:
+		refdef_t *ref = (refdef_t*)VMA(1);
+		if ( cl_widescreenHUD->integer && (ref->width != cls.glconfig.vidWidth || ref->height != cls.glconfig.vidHeight) )
+		{ // When not rendering a fullscreen scene scale it
+			ref->x = ref->x * cls.ws_xscale + cls.ws_xoffs;
+			ref->y = ref->y * cls.ws_yscale + cls.ws_yoffs;
+			ref->width *= cls.ws_xscale;
+			ref->height *= cls.ws_yscale;
+		}
+		else if ( cl_widescreenFOV->integer && (ref->width == cls.glconfig.vidWidth && ref->height == cls.glconfig.vidHeight) )
+		{ // Fullscreen scene: adjust FOV
+			// NOTE: This might break the underwater effect on the default cgame module and possible other effects added by custom cgame modules.
+			if ( cls.glconfig.vidWidth * 3 > cls.glconfig.vidHeight * 4 )
+			{ // Adjust fov (fau's algorithm used in mvsdk)
+				float x = cls.ws_width / tan(DEG2RAD(0.5f * ref->fov_x));
+				ref->fov_x = RAD2DEG(2 * atan2(ref->width, x));
+				ref->fov_y = RAD2DEG(2 * atan2(ref->height, x));
+			}
+		}
 		re.RenderScene( VMA(1) );
 		return 0;
 	case CG_R_SETCOLOR:
 		re.SetColor( VMA(1) );
 		return 0;
 	case CG_R_DRAWSTRETCHPIC:
-		re.DrawStretchPic( VMF(1), VMF(2), VMF(3), VMF(4), VMF(5), VMF(6), VMF(7), VMF(8), args[9] );
+		if ( cl_widescreenHUD->integer )
+			re.DrawStretchPic( VMF(1) * cls.ws_xscale + cls.ws_xoffs, VMF(2) * cls.ws_yscale + cls.ws_yoffs, VMF(3) * cls.ws_xscale, VMF(4) * cls.ws_yscale, VMF(5), VMF(6), VMF(7), VMF(8), args[9] );
+		else
+			re.DrawStretchPic( VMF(1), VMF(2), VMF(3), VMF(4), VMF(5), VMF(6), VMF(7), VMF(8), args[9] );
 		return 0;
 	case CG_R_MODELBOUNDS:
 		re.ModelBounds( args[1], VMA(2), VMA(3) );

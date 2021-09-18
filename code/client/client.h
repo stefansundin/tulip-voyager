@@ -351,6 +351,14 @@ typedef struct {
 	qhandle_t	charSetShader;
 	qhandle_t	whiteShader;
 	qhandle_t	consoleShader;
+
+	// Widescreen workaround
+	float		ws_width;
+	float		ws_height;
+	float		ws_xoffs;
+	float		ws_yoffs;
+	float		ws_xscale;
+	float		ws_yscale;
 } clientStatic_t;
 
 extern	clientStatic_t		cls;
@@ -428,6 +436,10 @@ extern	cvar_t	*cl_consoleKeys;
 extern	cvar_t	*cl_consoleUseScanCode;
 extern	cvar_t	*cl_consoleShiftRequirement;
 
+extern	cvar_t	*cl_widescreenHUD;
+extern	cvar_t	*cl_widescreenMenu;
+extern	cvar_t	*cl_widescreenFOV;
+
 #ifdef USE_MUMBLE
 extern	cvar_t	*cl_useMumble;
 extern	cvar_t	*cl_mumbleScale;
@@ -488,6 +500,8 @@ qboolean CL_CDKeyValidate( const char *key, const char *checksum );
 int CL_ServerStatus( char *serverAddress, char *serverStatusString, int maxLen );
 
 qboolean CL_CheckPaused(void);
+
+void CL_UpdateAspectAdjust( void );
 
 //
 // cl_input

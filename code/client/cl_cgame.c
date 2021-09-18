@@ -608,6 +608,7 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		return 0;
 #endif
 	case CG_R_RENDERSCENE:
+	{
 		refdef_t *ref = (refdef_t*)VMA(1);
 		if ( cl_widescreenHUD->integer && (ref->width != cls.glconfig.vidWidth || ref->height != cls.glconfig.vidHeight) )
 		{ // When not rendering a fullscreen scene scale it
@@ -632,10 +633,12 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		}
 		re.RenderScene( VMA(1) );
 		return 0;
+	}
 	case CG_R_SETCOLOR:
 		re.SetColor( VMA(1) );
 		return 0;
 	case CG_R_DRAWSTRETCHPIC:
+	{
 #ifdef ELITEFORCE // Workaround for zoom_mask
 		static qhandle_t zoomShader = -1;
 		if ( zoomShader == -1 ) zoomShader = re.RegisterShader( "gfx/misc/zoom_mask2" );
@@ -647,6 +650,7 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		else
 			re.DrawStretchPic( VMF(1), VMF(2), VMF(3), VMF(4), VMF(5), VMF(6), VMF(7), VMF(8), args[9] );
 		return 0;
+	}
 	case CG_R_MODELBOUNDS:
 		re.ModelBounds( args[1], VMA(2), VMA(3) );
 		return 0;

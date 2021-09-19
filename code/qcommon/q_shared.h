@@ -44,15 +44,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
   #define CINEMATICS_INTRO		"intro.roq"
 //  #define LEGACY_PROTOCOL	// You probably don't need this for your standalone game
 #elif defined ELITEFORCE
-  #define PRODUCT_NAME				"Lilium Voyager HM"
+  #define PRODUCT_NAME				"Tulip Voyager HM"
   #define BASEGAME					"baseEF"
-  #define CLIENT_WINDOW_TITLE		"Lilium Voyager Holomatch"
-  #define CLIENT_WINDOW_MIN_TITLE	"liliumvoy"
+  #define CLIENT_WINDOW_TITLE		"Tulip Voyager Holomatch"
+  #define CLIENT_WINDOW_MIN_TITLE	"tulipvoy"
 
   // GNU/Linux: $HOME/.local/share/homepath-name (lower case and spaces replaced with hyphens)
   // MacOS: $HOME/Library/Application Support/Homepath Name
   // Windows: %APPDATA%\Homepath Name
-  #define HOMEPATH_NAME				"Lilium Voyager"
+  #define HOMEPATH_NAME				"Tulip Voyager"
 
   //#define STEAMPATH_NAME			"Quake 3 Arena"
   //#define STEAMPATH_APPID			"2200"
@@ -70,7 +70,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
   // GNU/Linux: $HOME/.local/share/homepath-name (lower case and spaces replaced with hyphens)
   // MacOS: $HOME/Library/Application Support/Homepath Name
   // Windows: %APPDATA%\Homepath Name
-  #define HOMEPATH_NAME				"Lilium Quake3"
+  #define HOMEPATH_NAME				"Tulip Quake3"
 
   #define STEAMPATH_NAME			"Quake 3 Arena"
   #define STEAMPATH_APPID			"2200"
@@ -98,7 +98,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifndef RENDERER_PREFIX
   #ifdef ELITEFORCE
-    #define RENDERER_PREFIX "liliumvoyhm_renderer_"
+    #define RENDERER_PREFIX "tulipvoyhm_renderer_"
   #else
     #define RENDERER_PREFIX "renderer_"
   #endif
@@ -106,7 +106,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifndef PRODUCT_VERSION
   #ifdef ELITEFORCE
-    #define PRODUCT_VERSION "1.40"
+    #define PRODUCT_VERSION "1.00"
   #else
     #define PRODUCT_VERSION "1.36"
   #endif

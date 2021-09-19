@@ -1,3 +1,11 @@
+# Tulip Voyager
+**Tulip Voyager** is a fork of [Lilium Voyager](https://github.com/zturtleman/lilium-voyager) by zturtleman. As some
+users have begun using this fork for custom builds it made sense to rename it to avoid confusion.
+
+Tulip Voyager code commits: [compare/upstream_lilium...main](https://github.com/Daggolin/lilium-voyager/compare/upstream_lilium...main).
+You can find the Lilium Voyager README below.
+
+# Lilium Voyager
 <img src="https://raw.githubusercontent.com/zturtleman/lilium-voyager/master/misc/lilium.png" width="64">
 
 **Lilium Voyager** is a fork of [ioquake3](https://github.com/ioquake/ioq3) for running _Star Trek Voyager: Elite Force Holomatch_ (multiplayer). It is based on Thilo Schulz' [ioEF engine](http://thilo.tjps.eu/efport-progress/) (also known as iostvoyHM). The focus for Lilium Voyager is to maintain Elite Force multiplayer support on newer ioquake3 versions.

@@ -129,8 +129,8 @@ fi
 
 AVAILABLE_ARCHS=""
 
-IOQ3_VERSION="1.40" # `grep '^VERSION=' Makefile | sed -e 's/.*=\(.*\)/\1/'`
-IOQ3_RENDERER_PREFIX="liliumvoyhm_renderer_" # `grep '^RENDERER_PREFIX=' Makefile | sed -e 's/.*=\(.*\)/\1/'`
+IOQ3_VERSION="1.0.0" # `grep '^VERSION=' Makefile | sed -e 's/.*=\(.*\)/\1/'`
+IOQ3_RENDERER_PREFIX="tulipvoyhm_renderer_" # `grep '^RENDERER_PREFIX=' Makefile | sed -e 's/.*=\(.*\)/\1/'`
 IOQ3_CLIENT_ARCHS=""
 IOQ3_SERVER_ARCHS=""
 IOQ3_RENDERER_GL1_ARCHS=""
@@ -140,8 +140,8 @@ BASEDIR="baseEF"
 
 RENDERER_OPENGL="${IOQ3_RENDERER_PREFIX}opengl"
 
-EXECUTABLE_NAME="liliumvoyhm"
-DEDICATED_NAME="liliumvoyded"
+EXECUTABLE_NAME="tulipvoyhm"
+DEDICATED_NAME="tulipvoyded"
 
 RENDERER_OPENGL1_NAME="${RENDERER_OPENGL}1.dylib"
 RENDERER_OPENGL2_NAME="${RENDERER_OPENGL}2.dylib"
@@ -152,7 +152,7 @@ PKGINFO="APPL????"
 
 OBJROOT="build"
 #BUILT_PRODUCTS_DIR="${OBJROOT}/${TARGET_NAME}-darwin-${CURRENT_ARCH}"
-PRODUCT_NAME="Lilium Voyager"
+PRODUCT_NAME="Tulip Voyager"
 WRAPPER_EXTENSION="app"
 WRAPPER_NAME="${PRODUCT_NAME}.${WRAPPER_EXTENSION}"
 CONTENTS_FOLDER_PATH="${WRAPPER_NAME}/Contents"
@@ -253,7 +253,7 @@ PLIST="<?xml version=\"1.0\" encoding=\"UTF-8\"?>
     <key>CFBundleExecutable</key>
     <string>${EXECUTABLE_NAME}</string>
     <key>CFBundleIconFile</key>
-    <string>lilium</string>
+    <string>tulip</string>
     <key>CFBundleIdentifier</key>
     <string>moe.clover.${PRODUCT_NAME}</string>
     <key>CFBundleInfoDictionaryVersion</key>

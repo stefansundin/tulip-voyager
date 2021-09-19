@@ -42,12 +42,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //  #define LEGACY_PROTOCOL	// You probably don't need this for your standalone game
 #else
   #ifdef ELITEFORCE
-    #define PRODUCT_NAME			"Lilium Voyager HM"
+    #define PRODUCT_NAME			"Tulip Voyager HM"
     #define BASEGAME					"baseEF"
-    #define CLIENT_WINDOW_TITLE		"Lilium Voyager Holomatch"
-    #define CLIENT_WINDOW_MIN_TITLE	"liliumvoy"
+    #define CLIENT_WINDOW_TITLE		"Tulip Voyager Holomatch"
+    #define CLIENT_WINDOW_MIN_TITLE	"tulipvoy"
     #define HOMEPATH_NAME_UNIX		".stvef"
-    #define HOMEPATH_NAME_WIN			"STVEF"
+    #define HOMEPATH_NAME_WIN			"Tulip Voyager"
     #define HOMEPATH_NAME_MACOSX	HOMEPATH_NAME_WIN
     #define GAMENAME_FOR_MASTER		"EliteForce"
     #define LEGACY_PROTOCOL
@@ -57,7 +57,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     #define CLIENT_WINDOW_TITLE		"ioquake3"
     #define CLIENT_WINDOW_MIN_TITLE	"ioq3"
     #define HOMEPATH_NAME_UNIX		".q3a"
-    #define HOMEPATH_NAME_WIN			"Lilium Quake3"
+    #define HOMEPATH_NAME_WIN			"Tulip Quake3"
     #define HOMEPATH_NAME_MACOSX	HOMEPATH_NAME_WIN
     #define STEAMPATH_NAME			"Quake 3 Arena"
     #define STEAMPATH_APPID			"2200"
@@ -87,7 +87,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifndef RENDERER_PREFIX
   #ifdef ELITEFORCE
-    #define RENDERER_PREFIX "liliumvoyhm_renderer_"
+    #define RENDERER_PREFIX "tulipvoyhm_renderer_"
   #else
     #define RENDERER_PREFIX "renderer_"
   #endif
@@ -95,7 +95,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifndef PRODUCT_VERSION
   #ifdef ELITEFORCE
-    #define PRODUCT_VERSION "1.40"
+    #define PRODUCT_VERSION "1.00"
   #else
     #define PRODUCT_VERSION "1.36"
   #endif

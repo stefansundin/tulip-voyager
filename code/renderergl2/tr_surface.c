@@ -525,7 +525,6 @@ void RB_Line(vec3_t start, vec3_t end, vec3_t linedirection, vec3_t left,
 	     vec3_t *corners, float starttex, float endtex, refEntity_t *e)
 {
 	int ndx, numind;
-	vec4_t *vertcols;
 
 	RB_CHECKOVERFLOW( 4, 6 );
 
@@ -569,24 +568,22 @@ void RB_Line(vec3_t start, vec3_t end, vec3_t linedirection, vec3_t left,
 	}
 
 	// Texture stuff....
-	tess.texCoords[ndx][0][0] = 0;
-	tess.texCoords[ndx][0][1] = starttex;
+	tess.texCoords[ndx][0] = 0;
+	tess.texCoords[ndx][1] = starttex;
 
-	tess.texCoords[ndx+1][0][0] = 1;
-	tess.texCoords[ndx+1][0][1] = starttex;
+	tess.texCoords[ndx+1][0] = 1;
+	tess.texCoords[ndx+1][1] = starttex;
 	
-	tess.texCoords[ndx+2][0][0] = 1;
-	tess.texCoords[ndx+2][0][1] = endtex;
+	tess.texCoords[ndx+2][0] = 1;
+	tess.texCoords[ndx+2][1] = endtex;
 
-	tess.texCoords[ndx+3][0][0] = 0;
-	tess.texCoords[ndx+3][0][1] = endtex;
+	tess.texCoords[ndx+3][0] = 0;
+	tess.texCoords[ndx+3][1] = endtex;
 
-	vertcols = tess.vertexColors;
-
-	vertcols[ndx][0] = vertcols[ndx+1][0] = vertcols[ndx+2][0] = vertcols[ndx+3][0] = e->shaderRGBA[0] / 255.0f;
-	vertcols[ndx][1] = vertcols[ndx+1][1] = vertcols[ndx+2][1] = vertcols[ndx+3][1] = e->shaderRGBA[1] / 255.0f;
-	vertcols[ndx][2] = vertcols[ndx+1][2] = vertcols[ndx+2][2] = vertcols[ndx+3][2] = e->shaderRGBA[2] / 255.0f;
-	vertcols[ndx][3] = vertcols[ndx+1][3] = vertcols[ndx+2][3] = vertcols[ndx+3][3] = e->shaderRGBA[3] / 255.0f;
+	tess.color[ndx][0] = tess.color[ndx+1][0] = tess.color[ndx+2][0] = tess.color[ndx+3][0] = e->shaderRGBA[0] * 257;
+	tess.color[ndx][1] = tess.color[ndx+1][1] = tess.color[ndx+2][1] = tess.color[ndx+3][1] = e->shaderRGBA[1] * 257;
+	tess.color[ndx][2] = tess.color[ndx+1][2] = tess.color[ndx+2][2] = tess.color[ndx+3][2] = e->shaderRGBA[2] * 257;
+	tess.color[ndx][3] = tess.color[ndx+1][3] = tess.color[ndx+2][3] = tess.color[ndx+3][3] = e->shaderRGBA[3] * 257;
 
 	tess.numVertexes += 4;
 	tess.numIndexes += 6;
@@ -662,7 +659,6 @@ void RB_SurfaceLine2( void )
 	refEntity_t *e;
 	vec3_t startleft, endleft;		// I still vote the green party...
 	vec3_t start, end, linedirection, start2origin;
-	vec4_t *vertcols;
 	int ndx, numind;
 	
 	RB_CHECKOVERFLOW( 6, 12 );
@@ -723,34 +719,32 @@ void RB_SurfaceLine2( void )
 	VectorAdd(end, endleft, tess.xyz[ndx+5]);
 
 	// Texture stuff....
-	tess.texCoords[ndx][0][0] = 0;
-	tess.texCoords[ndx][0][1] = 0;
+	tess.texCoords[ndx][0] = 0;
+	tess.texCoords[ndx][1] = 0;
 
-	tess.texCoords[ndx+1][0][0] = 0.5;
-	tess.texCoords[ndx+1][0][1] = 0;
+	tess.texCoords[ndx+1][0] = 0.5;
+	tess.texCoords[ndx+1][1] = 0;
 	
-	tess.texCoords[ndx+2][0][0] = 1;
-	tess.texCoords[ndx+2][0][1] = 0;
+	tess.texCoords[ndx+2][0] = 1;
+	tess.texCoords[ndx+2][1] = 0;
 
-	tess.texCoords[ndx+3][0][0] = 1;
-	tess.texCoords[ndx+3][0][1] = 1;
+	tess.texCoords[ndx+3][0] = 1;
+	tess.texCoords[ndx+3][1] = 1;
 
-	tess.texCoords[ndx+4][0][0] = 0.5;
-	tess.texCoords[ndx+4][0][1] = 1;
+	tess.texCoords[ndx+4][0] = 0.5;
+	tess.texCoords[ndx+4][1] = 1;
 
-	tess.texCoords[ndx+5][0][0] = 0;
-	tess.texCoords[ndx+5][0][1] = 1;
+	tess.texCoords[ndx+5][0] = 0;
+	tess.texCoords[ndx+5][1] = 1;
 
-	vertcols = tess.vertexColors;
-
-	vertcols[ndx][0] = vertcols[ndx+1][0] = vertcols[ndx+2][0] =
-		vertcols[ndx+3][0] = vertcols[ndx+4][0] = vertcols[ndx+5][0] = e->shaderRGBA[0] / 255.0f;
-	vertcols[ndx][1] = vertcols[ndx+1][1] = vertcols[ndx+2][1] =
-		vertcols[ndx+3][1] = vertcols[ndx+4][1] = vertcols[ndx+5][1] = e->shaderRGBA[1] / 255.0f;
-	vertcols[ndx][2] = vertcols[ndx+1][2] = vertcols[ndx+2][2] =
-		vertcols[ndx+3][2] = vertcols[ndx+4][2] = vertcols[ndx+5][2] = e->shaderRGBA[2] / 255.0f;
-	vertcols[ndx][3] = vertcols[ndx+1][3] = vertcols[ndx+2][3] =
-		vertcols[ndx+3][3] = vertcols[ndx+4][3] = vertcols[ndx+5][3] = e->shaderRGBA[3] / 255.0f;
+	tess.color[ndx][0] = tess.color[ndx+1][0] = tess.color[ndx+2][0] =
+		tess.color[ndx+3][0] = tess.color[ndx+4][0] = tess.color[ndx+5][0] = e->shaderRGBA[0] * 257;
+	tess.color[ndx][1] = tess.color[ndx+1][1] = tess.color[ndx+2][1] =
+		tess.color[ndx+3][1] = tess.color[ndx+4][1] = tess.color[ndx+5][1] = e->shaderRGBA[1] * 257;
+	tess.color[ndx][2] = tess.color[ndx+1][2] = tess.color[ndx+2][2] =
+		tess.color[ndx+3][2] = tess.color[ndx+4][2] = tess.color[ndx+5][2] = e->shaderRGBA[2] * 257;
+	tess.color[ndx][3] = tess.color[ndx+1][3] = tess.color[ndx+2][3] =
+		tess.color[ndx+3][3] = tess.color[ndx+4][3] = tess.color[ndx+5][3] = e->shaderRGBA[3] * 257;
 
 	tess.numVertexes += 6;
 	tess.numIndexes += 12;
@@ -824,7 +818,6 @@ void RB_SurfaceCylinder(void)
 	vec3_t bottomcorner, topcorner, vieworigin;
 	float anglestep, tcstep = 0, width, width2, height;
 	int ndx, numind;
-	vec4_t *vertcols;
 	refEntity_t *e = &backEnd.currentEntity->e;
 	// for LOD calculation:
 	vec3_t bottom2origin, top2origin, lodcalc, projection;
@@ -894,7 +887,6 @@ void RB_SurfaceCylinder(void)
 	
 	ndx = tess.numVertexes;
 	numind = tess.numIndexes;
-	vertcols = tess.vertexColors;
 
 	// this loop is creating all surface planes.
 	while(index < planes)
@@ -941,37 +933,37 @@ void RB_SurfaceCylinder(void)
 		// Take care about the texture stuff
 		if(e->data.cylinder.wrap)
 		{
-			tess.texCoords[ndx][0][0] = tcstep * (index - 1);
-			tess.texCoords[ndx][0][1] = 0;
+			tess.texCoords[ndx][0] = tcstep * (index - 1);
+			tess.texCoords[ndx][1] = 0;
 			
-			tess.texCoords[ndx+1][0][0] = tcstep * (index - 1);
-			tess.texCoords[ndx+1][0][1] = 1;
+			tess.texCoords[ndx+1][0] = tcstep * (index - 1);
+			tess.texCoords[ndx+1][1] = 1;
 
-			tess.texCoords[ndx+2][0][0] = tcstep * index;
-			tess.texCoords[ndx+2][0][1] = 0;
+			tess.texCoords[ndx+2][0] = tcstep * index;
+			tess.texCoords[ndx+2][1] = 0;
 			
-			tess.texCoords[ndx+3][0][0] = tcstep * index;
-			tess.texCoords[ndx+3][0][1] = 1;
+			tess.texCoords[ndx+3][0] = tcstep * index;
+			tess.texCoords[ndx+3][1] = 1;
 		}
 		else
 		{
-			tess.texCoords[ndx][0][0] = 0;
-			tess.texCoords[ndx][0][1] = 0;
+			tess.texCoords[ndx][0] = 0;
+			tess.texCoords[ndx][1] = 0;
 			
-			tess.texCoords[ndx+1][0][0] = 0;
-			tess.texCoords[ndx+1][0][1] = 1;
+			tess.texCoords[ndx+1][0] = 0;
+			tess.texCoords[ndx+1][1] = 1;
 
-			tess.texCoords[ndx+2][0][0] = e->data.cylinder.stscale;
-			tess.texCoords[ndx+2][0][1] = 0;
+			tess.texCoords[ndx+2][0] = e->data.cylinder.stscale;
+			tess.texCoords[ndx+2][1] = 0;
 			
-			tess.texCoords[ndx+3][0][0] = e->data.cylinder.stscale;
-			tess.texCoords[ndx+3][0][1] = 1;
+			tess.texCoords[ndx+3][0] = e->data.cylinder.stscale;
+			tess.texCoords[ndx+3][1] = 1;
 		}
 
-		vertcols[ndx][0] = vertcols[ndx+1][0] = vertcols[ndx+2][0] = vertcols[ndx+3][0] = e->shaderRGBA[0] / 255.0f;
-		vertcols[ndx][1] = vertcols[ndx+1][1] = vertcols[ndx+2][1] = vertcols[ndx+3][1] = e->shaderRGBA[1] / 255.0f;
-		vertcols[ndx][2] = vertcols[ndx+1][2] = vertcols[ndx+2][2] = vertcols[ndx+3][2] = e->shaderRGBA[2] / 255.0f;
-		vertcols[ndx][3] = vertcols[ndx+1][3] = vertcols[ndx+2][3] = vertcols[ndx+3][3] = 1.0f;
+		tess.color[ndx][0] = tess.color[ndx+1][0] = tess.color[ndx+2][0] = tess.color[ndx+3][0] = e->shaderRGBA[0] * 257;
+		tess.color[ndx][1] = tess.color[ndx+1][1] = tess.color[ndx+2][1] = tess.color[ndx+3][1] = e->shaderRGBA[1] * 257;
+		tess.color[ndx][2] = tess.color[ndx+1][2] = tess.color[ndx+2][2] = tess.color[ndx+3][2] = e->shaderRGBA[2] * 257;
+		tess.color[ndx][3] = tess.color[ndx+1][3] = tess.color[ndx+2][3] = tess.color[ndx+3][3] = 255 * 257;
                                
 		ndx += 4;
 	}

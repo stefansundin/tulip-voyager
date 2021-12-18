@@ -205,6 +205,7 @@ static const unsigned int missionpak_checksums[] =
 	1438664554u
 };
 #endif
+#endif
 
 // if this is defined, the executable positively won't work with any paks other
 // than the demo pak, even if productid is present.  This is only used for our

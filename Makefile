@@ -135,7 +135,7 @@ endif
 
 ifndef CLIENTBIN
   ifeq ($(BUILD_ELITEFORCE),1)
-    CLIENTBIN=liliumvoyhm
+    CLIENTBIN=tulipvoyhm
   else
     CLIENTBIN=ioquake3
   endif
@@ -143,7 +143,7 @@ endif
 
 ifndef SERVERBIN
   ifeq ($(BUILD_ELITEFORCE),1)
-    SERVERBIN=liliumvoyded
+    SERVERBIN=tulipvoyded
   else
     SERVERBIN=ioq3ded
   endif
@@ -151,7 +151,7 @@ endif
 
 ifndef RENDERER_PREFIX
   ifeq ($(BUILD_ELITEFORCE),1)
-    RENDERER_PREFIX=liliumvoyhm_renderer_
+    RENDERER_PREFIX=tulipvoyhm_renderer_
   else
     RENDERER_PREFIX=renderer_
   endif

@@ -29,7 +29,6 @@ static const unsigned short fpucw = 0x007F;
 #else
 static const unsigned short fpucw = 0x0C7F;
 #endif
-#endif
 
 /*
  * GNU inline asm ftol conversion functions using SSE or FPU
